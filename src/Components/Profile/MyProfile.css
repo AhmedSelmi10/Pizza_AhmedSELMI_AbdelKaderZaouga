@@ -1,0 +1,80 @@
+.profile-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  background: #fff4e6; /* Couleur d'arrière-plan chaleureuse */
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+}
+
+.profile-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #d84315; /* Rouge pizza */
+}
+
+.profile-view p {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.profile-edit label {
+  display: block;
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.profile-input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+  border: 1px solid #ffcc80;
+  border-radius: 5px;
+}
+
+.profile-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-edit, .btn-update {
+  background: #ff5722;
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-edit:hover, .btn-update:hover {
+  background: #e64a19;
+}
+
+.btn-cancel {
+  background: #ffa726;
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background: #fb8c00;
+}
+
+.btn-delete {
+  background: #d84315;
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background: #b71c1c;
+}
