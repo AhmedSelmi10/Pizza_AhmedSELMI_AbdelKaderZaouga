@@ -72,7 +72,7 @@ function Register() {
                 <div className="container">
                     <div className="row justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
                         <div className="col-lg-6 text-center">
-                            <h1 style={{ color: '#e63946', fontWeight: 'bold' }}>Pizza Hub</h1>
+                            <h1 style={{ color: '#e63946', fontWeight: 'bold' }}>Pizza Time</h1>
                             <p style={{ fontSize: '18px', color: '#555' }}>Join the family and start selling delicious pizzas!</p>
                             <img 
                                 src="https://cdn-icons-png.flaticon.com/512/3132/3132693.png" 
@@ -148,16 +148,7 @@ function Register() {
                                             onChange={(e) => setBirthdate(e.target.value)}
                                         />
                                     </div>
-                                    <div className="mb-3">
-                                        <input
-                                            type="file"
-                                            name="profileImage"
-                                            id="profileImage"
-                                            className="form-control"
-                                            style={{ borderRadius: '10px' }}
-                                            onChange={(e) => setProfileImage(e.target.files[0])} // Corrected for file input
-                                        />
-                                    </div>
+                                    
                                     <div className="mb-3 position-relative">
                                         <input
                                             type={showPassword ? "text" : "password"}

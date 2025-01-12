@@ -12,83 +12,63 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  
+  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(""); // Reset error state
-
     try {
-      const result = await axios.post("http://localhost:3001/auth/login", {
-        email,
-        password,
-      });
-
-      console.log(result.data); // Debugging response
-      setTimeout(() => {
-        setLoading(false);
-        navigate("/dashboard"); // Corrected navigation spelling
-      }, 2000);
+      const result = await axios.post("http://localhost:3001/auth/login", { email, password });
+      const token = result.data.token;
+      if (token) {
+        localStorage.setItem("token", token); // Stockez le token
+        navigate("/dashboard");
+      } else {
+        throw new Error("Missing token in the response.");
+      }
     } catch (err) {
-      console.error("Login error:", err);
-
-      // Use server-provided error message if available
-      const errorMessage =
-        err.response?.data?.message || "Login failed. Please check your credentials.";
-      setLoading(false);
-      setError(errorMessage);
+      setError("Login failed. Check your credentials.");
     }
   };
-
+  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   return (
-    <div className="login" style={{ backgroundColor: "#ffe4b5", minHeight: "100vh" }}>
+    <div className="login-page" style={{ backgroundColor: "#ffe4b5", minHeight: "100vh" }}>
       <section className="login">
         <div className="container-fluid">
-          <div
-            className="row justify-content-center align-items-center"
-            style={{ minHeight: "100vh" }}
-          >
+          <div className="row justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
             <div className="col-lg-6">
-              <div
-                className="card-body p-5"
-                style={{ background: "#fff3e0", borderRadius: "10px" }}
-              >
-                <h2
-                  className="card-title mb-4 text-center"
-                  style={{ color: "#e63946", fontWeight: "bold" }}
-                >
+              <div className="card-body p-5" style={{ background: "#fff3e0", borderRadius: "10px" }}>
+                <h2 className="card-title mb-4 text-center" style={{ color: "#e63946", fontWeight: "bold" }}>
                   🍕 Login to Pizzeria
                 </h2>
+
                 {error && <div className="alert alert-danger text-center">{error}</div>}
+
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
                     <input
                       type="email"
-                      name="email"
-                      id="email"
                       className="form-control"
                       placeholder="Your Email"
                       style={{ borderColor: "#e63946" }}
                       autoComplete="off"
-                      aria-label="Email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
+
                   <div className="mb-3 position-relative">
                     <input
                       type={showPassword ? "text" : "password"}
-                      name="password"
-                      id="password"
                       className="form-control"
                       placeholder="Password"
                       style={{ borderColor: "#e63946" }}
-                      aria-label="Password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
@@ -102,11 +82,12 @@ function Login() {
                         cursor: "pointer",
                       }}
                       onClick={togglePasswordVisibility}
-                      aria-label="Toggle password visibility"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                       <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                     </div>
                   </div>
+
                   <div className="mb-3">
                     <button
                       type="submit"
@@ -123,17 +104,14 @@ function Login() {
                       {loading ? "Loading..." : "Login"}
                     </button>
                   </div>
+
                   <div className="text-center">
-                    <Link
-                      to="/forgot-password"
-                      className="mb-3 d-block"
-                      style={{ color: "#6a0572" }}
-                    >
+                    <Link to="/forgot-password" style={{ color: "#6a0572" }}>
                       Forgot Password?
                     </Link>
                     <Link
                       to="/register"
-                      className="btn btn-link"
+                      className="d-block mt-2"
                       style={{ color: "#e63946", fontWeight: "bold" }}
                     >
                       Create an Account
@@ -142,8 +120,9 @@ function Login() {
                 </form>
               </div>
             </div>
+
             <div className="col-lg-6 d-none d-lg-block text-center">
-              <h1 style={{ color: "#e63946", fontWeight: "bold" }}>Pizza Hub</h1>
+              <h1 style={{ color: "#e63946", fontWeight: "bold" }}>Pizza Time</h1>
               <p style={{ fontSize: "18px", color: "#555" }}>
                 Join the family and start selling delicious pizzas!
               </p>
@@ -157,6 +136,7 @@ function Login() {
           </div>
         </div>
       </section>
+
       {loading && (
         <div className="load">
           <hr />

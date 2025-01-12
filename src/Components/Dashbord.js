@@ -36,8 +36,15 @@ const Dashboard = () => {
       <main className="main-content">
         <header className="topbar">
           <h1>Dashboard</h1>
-          <button className="logout-btn">Déconnexion</button>
-        </header>
+          <button
+            className="logout-btn"
+            onClick={() => {
+              localStorage.clear();
+              window.location.href = '/login';
+            }}
+          >
+            Déconnexion
+          </button>        </header>
 
         <section className="stats-grid">
           <div className="stat-card">
@@ -45,7 +52,7 @@ const Dashboard = () => {
             <p>Commandes aujourd'hui</p>
           </div>
           <div className="stat-card">
-            <h3>540€</h3>
+            <h3>540TND</h3>
             <p>Ventes du jour</p>
           </div>
           <div className="stat-card">
@@ -82,21 +89,21 @@ const Dashboard = () => {
                 <td>1</td>
                 <td>Jean Dupont</td>
                 <td>Pepperoni</td>
-                <td>18€</td>
+                <td>18TND</td>
                 <td>Livrée</td>
               </tr>
               <tr>
                 <td>2</td>
                 <td>Sarah Lemoine</td>
                 <td>Quatre Fromages</td>
-                <td>22€</td>
+                <td>22TND</td>
                 <td>En cours</td>
               </tr>
               <tr>
                 <td>3</td>
                 <td>Paul Morel</td>
                 <td>Hawaïenne</td>
-                <td>20€</td>
+                <td>20TND</td>
                 <td>Annulée</td>
               </tr>
             </tbody>

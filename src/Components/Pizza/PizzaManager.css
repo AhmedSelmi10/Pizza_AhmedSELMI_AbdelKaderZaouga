@@ -1,0 +1,168 @@
+body {
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f7f7f7;
+}
+
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.topbar h2 {
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.error-message,
+.success-message {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.error-message {
+  background-color: #ff5c58;
+  color: white;
+}
+
+.success-message {
+  background-color: #4caf50;
+  color: white;
+}
+
+.form-section {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+.form-section h3 {
+  font-size: 20px;
+  color: #ff5c58;
+  margin-bottom: 20px;
+}
+
+.pizza-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.pizza-form input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.pizza-form input[type="file"] {
+  padding: 10px;
+}
+
+.pizza-form button {
+  padding: 12px;
+  background: #ff5c58;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.pizza-form button:hover {
+  background: #e63946;
+}
+
+.pizza-list {
+  margin-top: 40px;
+}
+
+.pizza-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.pizza-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.pizza-image {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.pizza-card h4 {
+  color: #333;
+  font-size: 18px;
+  margin-top: 15px;
+}
+
+.pizza-card p {
+  font-size: 14px;
+  color: #777;
+}
+
+.pizza-card button {
+  padding: 8px 16px;
+  background: #ff5c58;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 15px;
+}
+
+.pizza-card button:hover {
+  background: #e63946;
+}
+
+@media (max-width: 768px) {
+  .pizza-form button {
+    width: 100%;
+  }
+}
+.logout-btn {
+  background: #ff5c58;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+  position: fixed;    /* Position fixe par rapport à la fenêtre */
+  top: 10px;          /* 10px à partir du haut */
+  right: 10px;        /* 10px à partir de la droite */
+  z-index: 1000;      /* Assurez-vous que le bouton soit au-dessus des autres éléments */
+}
+
+.logout-btn:hover {
+  background: #e63946;
+}

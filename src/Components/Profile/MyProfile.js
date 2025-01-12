@@ -1,209 +1,193 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Pour la redirection
-import "./MyProfile.css"; // Import des styles
 import NavBar from "../navBar";
+import "../Dashbord.css";
+import "./MyProfile.css";
 
-function MyProfile() {
-  const [user, setUser] = useState(null); // Stocke les infos utilisateur
-  const [editMode, setEditMode] = useState(false); // Mode édition
-  const [formData, setFormData] = useState({
-    name: "",
-    lastname: "",
-    email: "",
-    gender: "",
-    birthdate: "",
-    profileImage: "",
-    password: "",
-  });
-  const [loading, setLoading] = useState(true);
+const MyProfile = () => {
+  const [user, setUser] = useState({});
+  const [newPassword, setNewPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newRole, setNewRole] = useState(""); // Peut être supprimé si non nécessaire
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
-
-  // Récupération dynamique de l'ID utilisateur (exemple basé sur session)
-  const userId = "6744eb612a4acde7c02f548e"//localStorage.getItem("userId"); // Assurez-vous de stocker l'ID utilisateur au moment de l'authentification
+  const [successMessage, setSuccessMessage] = useState(null);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (!userId) {
-      navigate("/login"); // Redirige si aucun utilisateur authentifié
-      return;
-    }
-
-    const fetchUser = async () => {
+    const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/users/getUser/${userId}`);
-        if (response.data) {
-          setUser(response.data);
-          setFormData({
-            name: response.data.name || "",
-            lastname: response.data.lastname || "",
-            email: response.data.email || "",
-            gender: response.data.gender || "",
-            birthdate: response.data.birthdate ? response.data.birthdate.split("T")[0] : "", // Format YYYY-MM-DD
-            profileImage: response.data.profileImage || "",
-            password: "",
-          });
-        } else {
-          setError("No user data found.");
-        }
+        const response = await axios.get("http://localhost:3001/auth/myprofile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUser(response.data);
       } catch (error) {
-        console.error("Failed to fetch user data:", error);
-        setError("Failed to load user data. Please try again later.");
-      } finally {
-        setLoading(false);
+        if (error.response && error.response.status === 401) {
+          setError("Unauthorized. Please log in again.");
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+        } else {
+          setError("An unexpected error occurred.");
+        }
       }
     };
+    fetchProfile();
+  }, [token]);
 
-    fetchUser();
-  }, [userId, navigate]);
+  // Fonction pour gérer la mise à jour du mot de passe
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
 
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:3001/users/updateUserRole/${userId}`, formData);
-      setEditMode(false);
-      alert("Profile updated successfully!");
+      const response = await axios.put(
+        `http://localhost:3001/users/updatePassword/${user._id}`,
+        { oldPassword, newPassword },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setSuccessMessage(response.data.message);
+      alert("Mot de passe mis à jour avec succès!");
+      window.location.reload(); // Recharger la page pour afficher les nouvelles données
     } catch (error) {
-      console.error("Failed to update user:", error);
-      alert("Error updating profile.");
+      setError("An error occurred while updating the password.");
+      alert("Erreur lors de la mise à jour du mot de passe!");
     }
   };
 
-  const handleDelete = async () => {
+  // Fonction pour gérer la mise à jour des autres informations du profil (nom, email, etc.)
+  const handleProfileUpdate = async (e) => {
+    e.preventDefault();
+
     try {
-      await axios.delete(`http://localhost:3001/users/deleteUser/${userId}`);
-      alert("Profile deleted successfully!");
-      navigate("/login");
+      const response = await axios.put(
+        `http://localhost:3001/users/updateUserProfile/${user._id}`,
+        { name: user.name, lastname: user.lastname, email: user.email, gender: user.gender, birthdate: user.birthdate, profileImage: user.profileImage },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setSuccessMessage("Profile updated successfully.");
+      setUser(response.data);
+      alert("Profil mis à jour avec succès!");
+      window.location.reload(); // Recharger la page pour afficher les nouvelles données
     } catch (error) {
-      console.error("Failed to delete user:", error);
-      alert("Error deleting profile.");
+      setError("An error occurred while updating the profile.");
+      alert("Erreur lors de la mise à jour du profil!");
     }
   };
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p className="error-message">{error}</p>;
 
   return (
-    <>
-      <div className="dashboard-container">
-        <NavBar />
-        <div className="profile-container">
-          <h2 className="profile-title">🍕 Welcome, {user?.name || "Guest"}!</h2>
-          {editMode ? (
-            <div className="profile-edit">
-              <label>
-                First Name:
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="profile-input"
-                />
-              </label>
-              <label>
-                Last Name:
-                <input
-                  type="text"
-                  name="lastname"
-                  value={formData.lastname}
-                  onChange={handleInputChange}
-                  className="profile-input"
-                />
-              </label>
-              <label>
-                Email:
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="profile-input"
-                />
-              </label>
-              <label>
-                Gender:
-                <select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleInputChange}
-                  className="profile-input"
-                >
-                  <option value="">Select</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select>
-              </label>
-              <label>
-                Birthdate:
-                <input
-                  type="date"
-                  name="birthdate"
-                  value={formData.birthdate}
-                  onChange={handleInputChange}
-                  className="profile-input"
-                />
-              </label>
-              <label>
-                Profile Image URL:
-                <input
-                  type="text"
-                  name="profileImage"
-                  value={formData.profileImage}
-                  onChange={handleInputChange}
-                  className="profile-input"
-                />
-              </label>
-              <label>
-                Password:
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  className="profile-input"
-                  placeholder="Enter new password"
-                />
-              </label>
-              <div className="profile-buttons">
-                <button onClick={handleUpdate} className="btn-update">
-                  Save Changes
-                </button>
-                <button onClick={() => setEditMode(false)} className="btn-cancel">
-                  Cancel
-                </button>
-              </div>
+    <div className="dashboard-container">
+      <NavBar />
+      <main className="main-content">
+        <header className="topbar">
+          <h1>Mon Profil</h1>
+          <button
+            className="logout-btn"
+            onClick={() => {
+              localStorage.clear();
+              window.location.href = "/login"; // Redirection vers la page de login
+            }}
+          >
+            Déconnexion
+          </button>
+        </header>
+
+        <section className="stats-grid">
+          <div className="stat-card">
+            <h3>{user.name || "Nom non disponible"}</h3>
+            <p>Nom de l'utilisateur</p>
+          </div>
+          <div className="stat-card">
+            <h3>{user.email || "Email non disponible"}</h3>
+            <p>Email</p>
+          </div>
+          <div className="stat-card">
+            <h3>{user.role || "Role non disponible"}</h3>
+            <p>Rôle</p>
+          </div>
+        </section>
+
+        <section className="orders-section">
+          <h3>Modifier les informations</h3>
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+
+          <form onSubmit={handleProfileUpdate}>
+            <div className="form-group">
+              <label>Nom :</label>
+              <input
+                type="text"
+                value={user.name || ""}
+                onChange={(e) => setUser({ ...user, name: e.target.value })}
+              />
             </div>
-          ) : (
-            <div className="profile-view">
-              <p><strong>First Name:</strong> {user.name}</p>
-              <p><strong>Last Name:</strong> {user.lastname}</p>
-              <p><strong>Email:</strong> {user.email}</p>
-              <p><strong>Gender:</strong> {user.gender}</p>
-              <p><strong>Birthdate:</strong> {user.birthdate}</p>
-              <p>
-                <strong>Profile Image:</strong>
-                <img src={user.profileImage} alt="Profile" className="profile-image" />
-              </p>
-              <p><strong>Role:</strong> {user.role}</p>
-              <div className="profile-buttons">
-                <button onClick={() => setEditMode(true)} className="btn-edit">
-                  Edit Profile
-                </button>
-                <button onClick={handleDelete} className="btn-delete">
-                  Delete Profile
-                </button>
-              </div>
+            <div className="form-group">
+              <label>Prénom :</label>
+              <input
+                type="text"
+                value={user.lastname || ""}
+                onChange={(e) => setUser({ ...user, lastname: e.target.value })}
+              />
             </div>
-          )}
-        </div>
-      </div>
-    </>
+            <div className="form-group">
+              <label>Email :</label>
+              <input
+                type="email"
+                value={user.email || ""}
+                onChange={(e) => setUser({ ...user, email: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label>Sexe :</label>
+              <input
+                type="text"
+                value={user.gender || ""}
+                onChange={(e) => setUser({ ...user, gender: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label>Date de naissance :</label>
+              <input
+                type="date"
+                value={user.birthdate || ""}
+                onChange={(e) => setUser({ ...user, birthdate: e.target.value })}
+              />
+            </div>
+
+            <button type="submit" className="logout-btn1">
+              Enregistrer les informations
+            </button>
+          </form>
+
+          <h3>Modifier le mot de passe</h3>
+          <form onSubmit={handlePasswordChange}>
+            <div className="form-group">
+              <label>Ancien mot de passe :</label>
+              <input
+                type="password"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Nouveau mot de passe :</label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit" className="logout-btn1">
+              Modifier le mot de passe
+            </button>
+          </form>
+        </section>
+      </main>
+    </div>
   );
-}
+};
 
 export default MyProfile;

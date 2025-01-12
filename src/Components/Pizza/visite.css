@@ -1,0 +1,305 @@
+/* Général */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
+  
+  .App {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Titre de la page */
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+  }
+  
+  /* Conteneur des cartes de pizzas */
+  .pizza-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    justify-items: center;
+    margin-bottom: 50px;
+    width: 100%;
+    max-width: 1200px;
+  }
+  
+  /* Carte de pizza */
+  .pizza-card {
+    background-color: #fff;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 280px;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .pizza-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Image de pizza */
+  .pizza-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+  
+  /* Titre de la pizza */
+  .pizza-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+  
+  /* Description de la pizza */
+  .pizza-card p {
+    font-size: 0.9rem;
+    color: #777;
+    margin: 10px 0;
+  }
+  
+  /* Prix de la pizza */
+  .pizza-card .price {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #FFC700;
+    margin-bottom: 20px;
+  }
+  
+  /* Bouton Ajouter au panier */
+  .pizza-card button {
+    padding: 12px;
+    background-color: #FFC700;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pizza-card button:hover {
+    background-color: #e6b000;
+  }
+  
+  /* Panier */
+  .cart {
+    background-color: #fff;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+    position: fixed;
+    top: 20%;
+    right: 20px;
+    width: 300px;
+    max-height: 450px;
+    overflow-y: auto;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .cart h3 {
+    font-size: 1.25rem;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  
+  .cart ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+  
+  .cart ul li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 15px;
+    padding: 12px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+  }
+  
+  .cart-total {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .cart-total span {
+    color: #FFC700;
+  }
+  
+  /* Pour les écrans plus petits */
+  @media (max-width: 768px) {
+    .pizza-list {
+      grid-template-columns: 1fr 1fr;
+    }
+  
+    .pizza-card {
+      max-width: 100%;
+    }
+    
+  }
+  /* Panier */
+.cart {
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  position: fixed;
+  top: 10%;
+  right: 30px;
+  width: 300px;
+  max-height: 450px;
+  overflow-y: auto;
+  z-index: 1000;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 1;
+}
+
+/* Header du panier */
+.cart h2 {
+  font-size: 1.6rem;
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 2px solid #f1f1f1;
+  padding-bottom: 10px;
+}
+
+/* Liste des articles dans le panier */
+.cart ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cart ul li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 15px;
+  padding: 12px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.cart ul li:hover {
+  background-color: #f1f1f1;
+}
+
+/* Détails de l'article dans le panier */
+.cart ul li span {
+  font-weight: 600;
+  color: #555;
+}
+
+/* Bouton retirer */
+.cart ul li button {
+  background-color: #FF4D4D;
+  border: none;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cart ul li button:hover {
+  background-color: #e60000;
+}
+
+/* Prix total */
+.cart-total {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 2px solid #f1f1f1;
+}
+
+.cart-total strong {
+  color: #FFC700;
+}
+
+/* Bouton de commande */
+.cart button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 12px;
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cart button:hover {
+  background-color: #218838;
+}
+
+/* Pour les écrans plus petits */
+@media (max-width: 768px) {
+  .cart {
+    width: 85%;
+    right: 5%;
+    top: 15%;
+  }
+}
+
+  
+.logout-btn {
+  background: #ff5c58;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background: #e63946;
+}

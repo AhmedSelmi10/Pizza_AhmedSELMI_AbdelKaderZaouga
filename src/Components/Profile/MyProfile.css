@@ -1,80 +1,73 @@
-.profile-container {
-  max-width: 500px;
-  margin: 2rem auto;
-  background: #fff4e6; /* Couleur d'arrière-plan chaleureuse */
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.topbar h1 {
+  font-size: 2rem;
+}
+
+.logout-btn {
+  background: #ff5c58;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background: #e63946;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: #fff;
+  padding: 1rem;
   border-radius: 10px;
-  padding: 2rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.profile-title {
-  text-align: center;
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  color: #d84315; /* Rouge pizza */
+.orders-section {
+  width: 100%;
 }
 
-.profile-view p {
-  font-size: 1rem;
-  margin: 0.5rem 0;
+.form-group {
+  margin-bottom: 1rem;
 }
 
-.profile-edit label {
-  display: block;
-  font-size: 1rem;
-  margin: 0.5rem 0;
+.form-group label {
+  font-weight: bold;
 }
 
-.profile-input {
+.form-group input {
   width: 100%;
   padding: 0.5rem;
   margin-top: 0.3rem;
-  border: 1px solid #ffcc80;
   border-radius: 5px;
+  border: 1px solid #ddd;
 }
 
-.profile-buttons {
-  margin-top: 1.5rem;
-  display: flex;
-  gap: 1rem;
-}
-
-.btn-edit, .btn-update {
-  background: #ff5722;
-  color: #fff;
+.logout-btn1 {
+  background: #ff5c58;
+  color: white;
   border: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: 5px;
+  padding: 10px 20px;
+  border-radius: 20px;
   cursor: pointer;
+  transition: background 0.3s;
 }
 
-.btn-edit:hover, .btn-update:hover {
-  background: #e64a19;
-}
-
-.btn-cancel {
-  background: #ffa726;
-  color: #fff;
-  border: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.btn-cancel:hover {
-  background: #fb8c00;
-}
-
-.btn-delete {
-  background: #d84315;
-  color: #fff;
-  border: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.btn-delete:hover {
-  background: #b71c1c;
+.logout-btn1:hover {
+  background: #e63946;
 }
