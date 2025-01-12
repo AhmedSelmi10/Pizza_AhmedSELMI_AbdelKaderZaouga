@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const UserModel = require('../models/user');
+const bcrypt = require('bcryptjs'); // Assurez-vous que bcryptjs est bien importé
 
 const jwt = require('jsonwebtoken');
 
@@ -80,30 +81,99 @@ exports.deleteUser= async (req, res) => {
     }
 };
 
-// Route pour mettre à jour le rôle d'un utilisateur
-exports.updateUserRole= async (req, res) => {
-    const userId = req.params.id;
-    const newRole = "coordinator"; // New role to assign to the user
-  
-    try {
-      // Find the user by their ID and update their role
-      const updatedUser = await UserModel.findByIdAndUpdate(
-        userId,
-        { role: newRole },
-        { new: true }
-      );
-  
-      if (!updatedUser) {
-        return res.status(404).json({ error: "User not found" });
-      }
-  
-      // You can optionally exclude sending the updated user in the response and simply send a success message
-      res.json({ message: "User role updated successfully" });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+// controllers/UserController.js
+exports.updateUserProfile = async (req, res) => {
+  const { id } = req.params;
+  const { name, lastname, email, gender, birthdate, profileImage } = req.body;
+
+  try {
+    // Trouver l'utilisateur par ID
+    const user = await UserModel.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé." });
     }
-  };
+
+    // Mettre à jour les informations de l'utilisateur (profil)
+    user.name = name || user.name;
+    user.lastname = lastname || user.lastname;
+    user.email = email || user.email;
+    user.gender = gender || user.gender;
+    user.birthdate = birthdate || user.birthdate;
+    user.profileImage = profileImage || user.profileImage;
+
+    // Sauvegarder l'utilisateur mis à jour
+    await user.save();
+
+    // Réponse avec les données mises à jour
+    res.json({ message: 'Profil mis à jour avec succès.', user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Une erreur est survenue lors de la mise à jour du profil.' });
+  }
+};
+exports.updateUserPassword = async (req, res) => {
+  const { id } = req.params;
+  const { oldPassword, newPassword } = req.body;
+
+  try {
+    // Trouver l'utilisateur par ID
+    const user = await UserModel.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé." });
+    }
+
+    // Vérifier si l'ancien mot de passe correspond
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "L'ancien mot de passe est incorrect." });
+    }
+
+    // Hacher le nouveau mot de passe
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Mettre à jour le mot de passe
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({ message: 'Mot de passe mis à jour avec succès.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Une erreur est survenue lors de la mise à jour du mot de passe.' });
+  }
+};
+
+// Contrôleur pour mettre à jour le rôle de l'utilisateur
+exports.updateUserRole = async (req, res) => {
+  const userId = req.params.id;  // ID de l'utilisateur à mettre à jour
+  const { newRole } = req.body;  // Nouveau rôle envoyé dans le corps de la requête
+
+  try {
+    // Vérifier si le rôle est valide
+    const validRoles = ["visitor", "coordinator", "admin"]; // Liste des rôles valides
+    if (!validRoles.includes(newRole)) {
+      return res.status(400).json({ error: 'Invalid role provided' });
+    }
+
+    // Mettre à jour l'utilisateur dans la base de données
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      { role: newRole },
+      { new: true }  // Retourner l'utilisateur mis à jour
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Réponse avec les nouvelles informations de l'utilisateur
+    res.json({ message: 'User role updated successfully', updatedUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
   
   exports.getUserByEmail = async (req, res) => {

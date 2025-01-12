@@ -11,5 +11,6 @@ router.get('/getUserByEmail/:email', userController.getUserByEmail); // New rout
 router.get('/getUserFullName/:id', userController.getUserNameById);
 router.get('/count', userController.countUsers);
 router.get('/getUserImage/:id', userController.getUserImageById);
-
+router.put('/updateUserProfile/:id', userController.updateUserProfile);
+router.put('/updatePassword/:id', userController.updateUserPassword);
 module.exports = router;

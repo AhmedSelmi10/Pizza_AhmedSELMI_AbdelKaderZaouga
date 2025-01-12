@@ -6,11 +6,16 @@ const cookieParser = require('cookie-parser');
 const http = require('http');
 const { Server } = require('socket.io');
 const axios = require('axios');
+const path = require('path');
+
 const userRouter = require('./routers/UserRouters');
 const authRouter = require('./routers/authRouter');
+const pizzaRoutes = require('./routers/pizzaRouters');
 const jwt = require('jsonwebtoken');
 
 const app = express();
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 const httpServer = http.createServer(app);
 
 // Middleware pour éviter la mise en cache
@@ -34,6 +39,8 @@ app.use(cors({
 // Utilisation des routers pour les différentes routes
 app.use('/users', userRouter);
 app.use('/auth', authRouter);
+app.use('/api', pizzaRoutes);
+
 
 // Connexion à MongoDB
 mongoose.connect('mongodb://127.0.0.1:27017/gadour')
